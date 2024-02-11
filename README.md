@@ -3,7 +3,8 @@
 > 1- ejecutar el siguiente comando npm i 
 > 2-ejecutar el siguiente comando npm i -D 
 > 3-configura las variables de entorno
-# configurar 
+# migrar la base de datos corre el siguiente comando
+>npx prisma migrate dev 
 
 # como correr el programa como desarrollador
 >  corre el siguiente comando npm run dev  
