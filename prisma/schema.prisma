@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+ provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  username String @unique @db.VarChar(40)
+  email String @unique @db.VarChar(60)
+  password String @db.VarChar(200)
+  createdAt DateTime @default(now())
+  isAdmin Boolean @default(false)
+  subastas Subasta[]
+  ofertas Ofertas[]
+  winners Winner[]
+
+}
+
+model Subasta{
+  idSubasta Int @id @default(autoincrement())
+  nameSubata String @db.VarChar(100)
+  imageSubasta String @db.VarChar(120)
+  descripcion String @db.VarChar(120)
+  creator User @relation(fields: [idCreator], references: [id]) 
+  idCreator Int 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  timeDurantion DateTime? 
+  finisAt DateTime?
+  isfinished Boolean @default(false)
+  ofertas Ofertas[]
+  winners Winner[]
+}
+
+model Ofertas{
+  idOferta Int @id @default(autoincrement())
+  subasta Subasta @relation(fields: [idSubasta], references: [idSubasta])
+  idSubasta Int
+  user User @relation(fields: [idUser], references: [id])
+  idUser Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  precio String @db.VarChar(200)
+}
+
+model Winner {
+  idWinner Int @id @default(autoincrement())
+  subasta Subasta @relation(fields: [idSubasta], references: [idSubasta])
+  idSubasta Int
+  user User @relation(fields: [idUser], references: [id])
+  idUser Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+}
