@@ -11,6 +11,7 @@ import { SubastaResponseIn } from "../controllers/types/InteracionResponse";
 import { SubastaController } from "../controllers/SubastaController";
 import { WinnerResponse } from "../controllers/types/WinnerResponse";
 import { CreateUserRespose } from "../controllers/types/AuthResponse";
+import { verify } from "../middlewares/socket";
 dotenv.config()
 const app:Express=express()
 const serverHttp=http.createServer(app)
@@ -33,11 +34,11 @@ app.use("/api",mainRoutes)
 
 const io=new Server(serverHttp,{
     cors:{
-        origin:"*"
+        origin:"http://localhost:3000"
     }
 })
 
-
+io.use(verify)
 io.of("/subastas")
 .on("connection",(socket)=>{
     socket.on("historial_Of",async(data)=>{
@@ -65,7 +66,8 @@ io.of("/subastas")
             io.of("/subastas").to(room).emit("end-subasta",subabyId.result.isFinished)
         }
         const isAdmin:CreateUserRespose=await general.getByCreator(parseInt(room),id)
-        io.of("/subastas").to(room).emit("is-admin",isAdmin.result)
+    
+        io.of("/subastas").to(room).emit("info-subasta",subabyId.result)
        io.of("/subastas").to(room).emit("get-pujas",result)
     })
 

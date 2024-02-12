@@ -11,7 +11,20 @@ export const getAllPujas=async(idSuba:number):Promise<any[]>=>{
             where:{
                 idSubasta:idSuba,
             },
-           
+            select:{
+                 idOferta:true,
+                 idSubasta:true,
+                 idUser:true,
+                 createdAt:true,
+                 updatedAt:true,
+                 precio:true,
+                 user:{
+                    select:{
+                        username:true
+                    }
+                 }
+
+            },
             orderBy:{
                 createdAt:"desc"
             },

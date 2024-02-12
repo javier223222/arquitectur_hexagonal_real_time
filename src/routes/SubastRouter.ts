@@ -92,6 +92,31 @@ subastaServer
               const subastaCreated:SubastaController=new SubastaController()
               const result:CreateUserRespose=await subastaCreated.getMyownSubasta(id)
               return res.status(result.status).json(result)
-            })            
+            })   
+subastaServer
+            .route("/isAdmin")
+            
+            .get(verifyToken,async(req:Request,res:Response)=>{
+              const general:SubastaController=new SubastaController()
+              const {room}=req.query
+              const {id}=await getToekndata(req.headers["x-access-token"] as string)
+              console.log(id)
+              const isAdmin:CreateUserRespose=await general.getByCreator(parseInt(room as string),id)
+              console.log(isAdmin.result)
+              if(isAdmin.result){
+                return res.status(200).json(
+                  {
+                    result:true
+                  }
+                )
+              }else{
+                return res.status(200).json(
+                  {
+                    result:false
+                  }
+                )
+              }
+            
+            })                    
 
 export default subastaServer
